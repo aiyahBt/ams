@@ -59,8 +59,12 @@ def application_form_view(request, application_round_id):
         application_info = ImageUploadingTest.objects.filter(application_round_id=application_round_id, user=request.user.id).first()
         application_round = ApplicationRound.objects.filter(id=application_round_id).first()
 
-        print(type(application_info), type(application_round))
-        form = ApplicationForm(request.POST, request.FILES)
+        # print(type(application_info), type(application_round))
+        if application_info:
+            form = ApplicationForm(request.POST, request.FILES, instance=application_info)
+        else:
+            form = ApplicationForm(request.POST, request.FILES)
+
         try:
             with transaction.atomic():
 
@@ -75,7 +79,6 @@ def application_form_view(request, application_round_id):
                         application_info.save()
                         print(application_info)
                 else:
-                    form.instance = application_info
 
                     if form.is_valid():
                         form.save()
