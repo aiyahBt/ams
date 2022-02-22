@@ -10,8 +10,8 @@ def register(response):
         form = RegisterForm(response.POST)
         if form.is_valid():
             form.save()
-            print('saved')
-        return redirect("/home")
+            
+            return redirect("/home")
     else:
         form = RegisterForm()
 
