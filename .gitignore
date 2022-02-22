@@ -6,3 +6,8 @@
 *.iml
 out
 gen
+
+
+__pycache__/
+
+media/*
