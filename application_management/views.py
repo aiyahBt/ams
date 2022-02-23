@@ -77,17 +77,18 @@ def application_form_view(request, application_round_id):
                                                                              doc=form.cleaned_data['doc'])
                         # application_info = ImageUploadingTest.objects.create()
                         application_info.save()
-                        print(application_info)
+                        # print(application_info)
+                        return redirect('/application-announcement')
                 else:
 
                     if form.is_valid():
                         form.save()
+                        return redirect('/application-announcement')
 
-                        return redirect('/home')
         except IntegrityError:
             return redirect('/home')
 
-        return redirect('/application-announcement')
+
 
 
     else:
