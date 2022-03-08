@@ -19,7 +19,7 @@ class ApplicationRound(models.Model):
     date_created = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return '{} {} {}'.format(self.id, self.start_date, self.active)
+        return '{} {} {} {}'.format(self.id, self.title, self.start_date, self.active)
 
 
 # Function for ImageUploadingTest

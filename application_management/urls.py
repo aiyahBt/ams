@@ -8,6 +8,7 @@ urlpatterns = [
     path('application-announcement/new-round', views.announce_new_application_round_view, name='new_round'),
 
     path('application-form/<int:application_round_id>', views.application_form_view, name='application_form'),
+    path('application-round/<int:application_round_id>/edit', views.application_round_edit_view, name='edit_application_round'),
 
     path('upload/', views.image_upload_view, name='upload_image'),
 

@@ -25,9 +25,16 @@ def image_upload_view(request):
 
 def application_announcement_view(request):
 
-    stuff_for_frontend = {
-        'application_round_list': ApplicationRound.objects.filter(visible=True, active=True)
-    }
+    application_rounds = ApplicationRound.objects.all().filter()
+    if request.user.is_staff:
+        stuff_for_frontend = {
+            'application_round_list': application_rounds
+        }
+
+    else:
+        stuff_for_frontend = {
+            'application_round_list': application_rounds.filter(visible=True, active=True)
+        }
 
     return render(request, 'application-announcement/announce.html', stuff_for_frontend)
 
@@ -36,10 +43,16 @@ def announce_new_application_round_view(request):
     if request.method == 'POST':
         form = ApplicationRoundForm(request.POST)
 
-        form._meta.model.user = request.user
+        # form._meta.model.user = request.user
+        print(request.POST)
+        print(request.FILES)
+
 
         if form.is_valid():
-            form.save()
+            print(form.cleaned_data)
+            application_round = form.save(commit=False)
+            application_round.user = request.user
+            application_round.save()
 
             # return render(request, 'application-announcement/announce.html', {})
             return redirect('/application-announcement')
@@ -48,23 +61,49 @@ def announce_new_application_round_view(request):
 
     return render(request, 'application-announcement/announce-new-application-round.html', {'form': form})
 
-def application_form_view(request, application_round_id):
+def application_round_edit_view(request, application_round_id):
 
+    if not(request.user.is_staff):
+       return redirect('/home')
 
     if request.method == 'POST':
+        application_round = ApplicationRound.objects.filter(id=application_round_id).first()
 
-        if not(request.user.is_authenticated):
-            return redirect('/home')
+        if application_round:
+            form = ApplicationRoundForm(request.POST, instance=application_round)
+
+            if form.is_valid():
+                form.save()
+                return redirect('/application-announcement')
+
+    else:
+        application_round = ApplicationRound.objects.filter(id=application_round_id).first()
+
+        if application_round:
+            form = ApplicationRoundForm(instance=application_round)
+        else:
+            return redirect('/application-announcement')
+
+    return render(request, 'application-announcement/application-round-edit-view.html', {'form': form})
+
+
+def application_form_view(request, application_round_id):
+
+    if not (request.user.is_authenticated):
+        return redirect('/home')
+
+    if request.method == 'POST':
 
         application_info = ImageUploadingTest.objects.filter(application_round_id=application_round_id, user=request.user.id).first()
         application_round = ApplicationRound.objects.filter(id=application_round_id).first()
 
-        # print(type(application_info), type(application_round))
         if application_info:
             form = ApplicationForm(request.POST, request.FILES, instance=application_info)
         else:
             form = ApplicationForm(request.POST, request.FILES)
 
+        print(dict(request.POST))
+        print(dict(request.FILES))
         try:
             with transaction.atomic():
 
@@ -87,10 +126,6 @@ def application_form_view(request, application_round_id):
 
         except IntegrityError:
             return redirect('/home')
-
-
-
-
     else:
         obj = ImageUploadingTest.objects.filter(
             application_round_id=application_round_id,

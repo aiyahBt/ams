@@ -23,11 +23,11 @@
           <tbody>
             {% for round in application_round_list %}
                 <tr>
-                  <th scope="row">{{ round.title }}</th>
+                  <th scope="row" > <a href="{% url 'appmanage:edit_application_round' round.id %}"> {{ round.title }}</a> </th>
                   <td>{{ round.start_date }}</td>
                   <td>{{ round.end_date }}</td>
-
                 </tr>
+
             {% endfor %}
 
 
@@ -46,12 +46,14 @@
 
           <tbody>
             {% for round in application_round_list %}
+                {% if round.visible and round.active %}
                 <tr>
                   <th scope="row" > <a href="{% url 'appmanage:application_form' round.id %}"> {{ round.title }}</a> </th>
                   <td>{{ round.start_date }}</td>
                   <td>{{ round.end_date }}</td>
 
                 </tr>
+                {% endif %}
             {% endfor %}
 
           </tbody>
