@@ -1,17 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-       {{ form.as_p }}
-      <button type="submit">Upload</button>
-    </form>
+<head>
+  <meta charset="UTF-8">
+  <title>User</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <style>
+    .nav-link {
+      margin-left: 610px;
+    }
+
+    .bg-color {
+      background-color: #99CCFF;
+    }
+
+    form {
+      margin: 30px;
+
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <img class="navbar-brand"
+        src="https://scontent.fkkc1-1.fna.fbcdn.net/v/t39.30808-6/275423173_4855741387855032_5796922971706807414_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=5cd70e&_nc_eui2=AeFXSVX47nvaHsLl-NhSgwlq6u5Wj_l_Wi7q7laP-X9aLuZHUCo03XpmYI3zhoGv-EcEvRa5ZNuyDf-W6MHm7MaT&_nc_ohc=ikqO-rEXfX8AX9yuYQP&_nc_ht=scontent.fkkc1-1.fna&oh=00_AT_2jPTizOukMAgOg5GsauXvT6VWXcEI5BsC7-DiceQMng&oe=622B7E75"
+        alt="CP : COLLEGE OF COMPUTING" width="100"/>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      {% if user.is_superuser %}
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page"
+              href="{% url 'appmanage:new_round' %}">สร้างโครงการรับสมัครนักศึกษาเข้าเรียน</a>
+          </li>
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </nav>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">ส่งเอกสาร</button>
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    <a href="/application-announcement" class="btn btn-danger">ยกเลิก</a>
+  </form>
 
 
 </body>
+
 </html>
