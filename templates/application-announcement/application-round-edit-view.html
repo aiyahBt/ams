@@ -22,8 +22,9 @@
     <form class= "style-form" action="" method="post" enctype='multipart/form-data'>
         {% csrf_token %}
         {{ form.as_p }}
-        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
         <button type="submit" class="btn btn-success">บันทึก</button>
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        <a href="/application-announcement" class="btn btn-danger">ยกเลิก</a>
         
     </form>
 
