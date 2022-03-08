@@ -3,7 +3,7 @@ from django.db import IntegrityError, transaction
 
 from django.shortcuts import render, redirect
 from .forms import ApplicationForm, ApplicationRoundForm
-from .models import ApplicationRound, ImageUploadingTest
+from .models import ApplicationRound, ApplicationFormModel
 
 # Create your views here.
 def image_upload_view(request):
@@ -94,7 +94,7 @@ def application_form_view(request, application_round_id):
 
     if request.method == 'POST':
 
-        application_info = ImageUploadingTest.objects.filter(application_round_id=application_round_id, user=request.user.id).first()
+        application_info = ApplicationFormModel.objects.filter(application_round_id=application_round_id, user=request.user.id).first()
         application_round = ApplicationRound.objects.filter(id=application_round_id).first()
 
         if application_info:
@@ -109,12 +109,9 @@ def application_form_view(request, application_round_id):
 
                 if application_info is None:
                     if form.is_valid():
-                        application_info = ImageUploadingTest.objects.create(application_round=application_round,
-                                                                             user=request.user,
-                                                                             title=form.cleaned_data['title'],
-                                                                             image=form.cleaned_data['image'],
-                                                                             doc=form.cleaned_data['doc'])
-                        # application_info = ImageUploadingTest.objects.create()
+                        application_info = form.save(commit=False)
+                        application_info.user = request.user
+                        application_info.application_round = application_round
                         application_info.save()
                         # print(application_info)
                         return redirect('/application-announcement')
@@ -127,7 +124,7 @@ def application_form_view(request, application_round_id):
         except IntegrityError:
             return redirect('/home')
     else:
-        obj = ImageUploadingTest.objects.filter(
+        obj = ApplicationFormModel.objects.filter(
             application_round_id=application_round_id,
             user=request.user.id).first()
 
