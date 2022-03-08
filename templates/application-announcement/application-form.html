@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Test</title>
 </head>
 <body>
 
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
+      <p>test</p>
        {{ form.as_p }}
       <button type="submit">Upload</button>
     </form>
